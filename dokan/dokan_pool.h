@@ -55,6 +55,7 @@ VOID PushIoEventBuffer(PDOKAN_IO_EVENT IoEvent);
 // Default Event size.
 PEVENT_INFORMATION PopEventResult();
 VOID PushEventResult(PEVENT_INFORMATION EventResult);
+PEVENT_INFORMATION AllocEventResult(ULONG size);
 VOID FreeEventResult(PEVENT_INFORMATION EventResult);
 
 // Event with extra memory allocated for events holding additional data. 

@@ -934,7 +934,7 @@ VOID CreateDispatchCommon(PDOKAN_IO_EVENT IoEvent, ULONG SizeOfEventInfo, BOOL U
       IoEvent->EventResultSize =
           DispatchGetEventInformationLength(SizeOfEventInfo);
       IoEvent->EventResult =
-          (PEVENT_INFORMATION)malloc(IoEvent->EventResultSize);
+          (PEVENT_INFORMATION)AllocEventResult(IoEvent->EventResultSize);
       if (!IoEvent->EventResult) {
         return;
       }

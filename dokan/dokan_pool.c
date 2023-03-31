@@ -363,7 +363,8 @@ PEVENT_INFORMATION PopEventResult() {
   }
   LeaveCriticalSection(&g_EventResultCriticalSection);
   if (!eventResult) {
-    eventResult = (PEVENT_INFORMATION)malloc(DOKAN_EVENT_INFO_DEFAULT_SIZE);
+    eventResult =
+        (PEVENT_INFORMATION)AllocEventResult(DOKAN_EVENT_INFO_DEFAULT_SIZE);
   }
   if (eventResult) {
     RtlZeroMemory(eventResult, DOKAN_EVENT_INFO_DEFAULT_SIZE);
@@ -371,9 +372,14 @@ PEVENT_INFORMATION PopEventResult() {
   return eventResult;
 }
 
+PEVENT_INFORMATION AllocEventResult(ULONG size) 
+{
+    void* p = _aligned_malloc(size + 24, 64);
+  return (PEVENT_INFORMATION)((char*)p + 24);
+}
 VOID FreeEventResult(PEVENT_INFORMATION EventResult) {
   if (EventResult) {
-    free(EventResult);
+    _aligned_free((char*)EventResult - 24);
   }
 }
 
@@ -405,7 +411,8 @@ PEVENT_INFORMATION Pop16KEventResult() {
   }
   LeaveCriticalSection(&g_16KEventResultCriticalSection);
   if (!eventResult) {
-    eventResult = (PEVENT_INFORMATION)malloc(DOKAN_EVENT_INFO_16K_SIZE);
+    eventResult =
+        (PEVENT_INFORMATION)AllocEventResult(DOKAN_EVENT_INFO_16K_SIZE);
   }
   if (eventResult) {
     RtlZeroMemory(eventResult, FIELD_OFFSET(EVENT_INFORMATION, Buffer));
@@ -442,7 +449,8 @@ PEVENT_INFORMATION Pop32KEventResult() {
   }
   LeaveCriticalSection(&g_32KEventResultCriticalSection);
   if (!eventResult) {
-    eventResult = (PEVENT_INFORMATION)malloc(DOKAN_EVENT_INFO_32K_SIZE);
+    eventResult =
+        (PEVENT_INFORMATION)AllocEventResult(DOKAN_EVENT_INFO_32K_SIZE);
   }
   if (eventResult) {
     RtlZeroMemory(eventResult, FIELD_OFFSET(EVENT_INFORMATION, Buffer));
@@ -479,7 +487,8 @@ PEVENT_INFORMATION Pop64KEventResult() {
   }
   LeaveCriticalSection(&g_64KEventResultCriticalSection);
   if (!eventResult) {
-    eventResult = (PEVENT_INFORMATION)malloc(DOKAN_EVENT_INFO_64K_SIZE);
+    eventResult =
+        (PEVENT_INFORMATION)AllocEventResult(DOKAN_EVENT_INFO_64K_SIZE);
   }
   if (eventResult) {
     RtlZeroMemory(eventResult, FIELD_OFFSET(EVENT_INFORMATION, Buffer));
@@ -516,7 +525,8 @@ PEVENT_INFORMATION Pop128KEventResult() {
   }
   LeaveCriticalSection(&g_128KEventResultCriticalSection);
   if (!eventResult) {
-    eventResult = (PEVENT_INFORMATION)malloc(DOKAN_EVENT_INFO_128K_SIZE);
+    eventResult =
+        (PEVENT_INFORMATION)AllocEventResult(DOKAN_EVENT_INFO_128K_SIZE);
   }
   if (eventResult) {
     RtlZeroMemory(eventResult, FIELD_OFFSET(EVENT_INFORMATION, Buffer));
